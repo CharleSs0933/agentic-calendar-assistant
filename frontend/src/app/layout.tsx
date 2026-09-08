@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@descope/nextjs-sdk";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,12 +19,23 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const cookieOptions = {
+    sameSite: "Lax" as const,
+    secure: process.env.NODE_ENV !== "development",
+  };
+
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    <AuthProvider
+      projectId={process.env.NEXT_PUBLIC_DESCOPE_PROJECT_ID!}
+      sessionTokenViaCookie={cookieOptions}
+      refreshTokenViaCookie={cookieOptions}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
-    </html>
+      <html
+        lang="en"
+        className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      >
+        <body className="min-h-full flex flex-col">{children}</body>
+      </html>
+    </AuthProvider>
   );
 }
