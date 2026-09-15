@@ -34,7 +34,7 @@ app.get("/health", async (_req, res) => {
   }
 });
 
-app.use("/api/connection", connectionRouter);
+app.use("/api/connections", connectionRouter);
 
 app.listen(port, () => {
   console.log(`Agentic Calendar App is running on port ${port}`);
