@@ -32,6 +32,13 @@ const styles = {
   refreshIcon: "size-3.5",
 } as const;
 
+function statusLabel(status: ConnectionInfo["status"]) {
+  if (status === "connected") return "Connected";
+  if (status === "pending") return "Pending";
+
+  return "Not Connected";
+}
+
 function ConnectionPanel({ sessionToken }: { sessionToken: string }) {
   const [connection, setConnection] = useState<ConnectionInfo | null>(null);
   const [loading, setLoading] = useState(true);
@@ -97,6 +104,14 @@ function ConnectionPanel({ sessionToken }: { sessionToken: string }) {
             <p className={styles.label}>{connection.label}</p>
 
             {/* label */}
+            <p
+              className={cn(
+                styles.status,
+                connected ? styles.statusConnected : styles.statusDisconnected,
+              )}
+            >
+              {statusLabel(connection.status)}
+            </p>
           </div>
           <Button
             size={"sm"}
